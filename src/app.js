@@ -2,11 +2,14 @@
 
 const React = require('react');
 const { render } = require('react-dom');
-const { createStore, applyMiddleware } = require('redux');
+const { createStore, combineReducers, applyMiddleware } = require('redux');
 const { Provider } = require('react-redux');
+const { Router, Route, IndexRoute, hashHistory } = require('react-router');
+const { syncHistoryWithStore, routerReducer } = require('react-router-redux');
 const thunk = require('redux-thunk');
 
 const App = require('./components');
+const Library = require('./components/library.js');
 const reducer = require('./reducers');
 
 const logger = store => next => action => {
@@ -17,13 +20,20 @@ const logger = store => next => action => {
 };
 
 let store = createStore(
-  reducer,
-  applyMiddleware(thunk, logger)
+  combineReducers({
+    library: reducer,
+    routing: routerReducer,
+  }),
+  applyMiddleware(thunk)
 );
 
 render(
   <Provider store={store}>
-    <App />
+    <Router history={hashHistory}>
+      <Route path='/' component={App}>
+        <IndexRoute component={Library} />
+      </Route>
+    </Router>
   </Provider>, 
   document.getElementById('container')
 );

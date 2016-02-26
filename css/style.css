@@ -1,0 +1,16 @@
+body {
+  background: #232323;
+}
+
+.ui.vertical.menu > a.active.item {
+  color: #E2547F !important;
+}
+
+.ui.vertical.menu > .item, .ui.vertical.menu > .item:hover {
+  color: white !important;
+}
+
+.header {
+  background: #2F2F2F;
+  height: 50px;
+}

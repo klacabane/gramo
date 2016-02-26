@@ -1,14 +1,14 @@
 'use strict';
 
-const merge = require('merge');
+const merge = (obj1, obj2) => Object.assign({}, obj1, obj2);
 
 const initialState = {
   error: null,
   isFetching: false,
-  items: [],
+  mixtapes: [],
 };
 
-const mixtapeReducer = (state = initialState, action) => {
+const searchMixtapeReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SEARCH_MIXTAPES':
       return merge(state, {
@@ -26,7 +26,7 @@ const mixtapeReducer = (state = initialState, action) => {
       return merge(state, {
         error: null,
         isFetching: false,
-        items: action.payload,
+        mixtapes: action.payload,
       });
 
     default:
@@ -34,4 +34,4 @@ const mixtapeReducer = (state = initialState, action) => {
   }
 };
 
-module.exports = mixtapeReducer;
+module.exports = searchMixtapeReducer;
