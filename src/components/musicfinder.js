@@ -2,6 +2,10 @@
 
 const React = require('react');
 const classNames = require('classnames');
+const { connect } = require('react-redux');
+const { bindActionCreators } = require('redux');
+
+const actions = require('../actions/mixtape.js');
 
 class MusicFinder extends React.Component {
   constructor() {
@@ -9,9 +13,19 @@ class MusicFinder extends React.Component {
 
     this.state = {
       show: false,
-      // index of the selected item
-      index: 0,
     };
+  }
+
+  componentDidMount() {
+    const s = (t) => {
+      this.props.searchMixtape(t)
+        .then(() => {
+          this.setState({
+            show: true,
+          });
+        });
+    }
+    s('slime season')
   }
 
   handleKeyUp(e) {
@@ -19,29 +33,27 @@ class MusicFinder extends React.Component {
 
   render() {
     return (
-      <div id='musicfinder' className='fixed'>
-        <div className='ui form attached fluid segment'>
+      <div id='musicfinder' className='ten wide column'>
           <div className={
-            classNames('ui left icon large transparent input', {
-              loading: false,
+            classNames('ui inverted transparent fluid icon input', {
+              loading: this.props.isFetching,
             })
           }>
-            <i className='search icon'></i>
             <input 
               id='musicfinder-input'
               placeholder='Music' />
+            <i className='search link icon'></i>
           </div>
-        </div>
+          <div className='ui inverted divider'></div>
         {
-          this.state.show ?
-            <div className='ui attached yellow message'>
-              <div className='content'>
+          this.state.show && !this.props.isFetching ?
+            <div className='ui message'>
+                <div className='ui middle aligned divided list'>
                 {
                   this.props.results.map((result, i) => {
                     return <ResultRow
                       key={i}
-                      item={result}
-                      onClick={this.handleKeyUp} />;
+                      item={result} />;
                   })
                 }
               </div>
@@ -56,9 +68,32 @@ class MusicFinder extends React.Component {
 class ResultRow extends React.Component {
   render() {
     return (
-      <div></div>
+      <div className='item'>
+        <div className='right floated content'>
+          <div className='ui small icon buttons'>
+            <button className='ui button'>
+              <i className='download icon'></i>
+            </button>
+          </div>
+        </div>
+        <img className='ui tiny image' src={this.props.item.cover} />
+        <div className='content'>
+          <div className='header'>{this.props.item.title}</div>
+          Title
+        </div>
+      </div>
     );
   }
 }
 
-module.exports = MusicFinder;
+const stateToProps = (state, props) => {
+  return {
+    error: state.search.error,
+    isFetching: state.search.isFetching,
+    results: state.search.results,
+  };
+};
+
+const dispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
+
+module.exports = connect(stateToProps, dispatchToProps)(MusicFinder);

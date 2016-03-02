@@ -5,7 +5,7 @@ const merge = (obj1, obj2) => Object.assign({}, obj1, obj2);
 const initialState = {
   error: null,
   isFetching: false,
-  mixtapes: [],
+  results: [],
 };
 
 const searchMixtapeReducer = (state = initialState, action) => {
@@ -26,7 +26,7 @@ const searchMixtapeReducer = (state = initialState, action) => {
       return merge(state, {
         error: null,
         isFetching: false,
-        mixtapes: action.payload,
+        results: action.payload,
       });
 
     default:
@@ -34,4 +34,6 @@ const searchMixtapeReducer = (state = initialState, action) => {
   }
 };
 
-module.exports = searchMixtapeReducer;
+module.exports = {
+  search: searchMixtapeReducer,
+};

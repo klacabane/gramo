@@ -10,7 +10,11 @@ body {
   color: white !important;
 }
 
-.header {
+.column.header {
   background: #2F2F2F;
-  height: 50px;
+}
+
+#musicfinder {
+  position: fixed;
+  margin-top: 20px;
 }

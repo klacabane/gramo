@@ -10,7 +10,7 @@ const thunk = require('redux-thunk');
 
 const App = require('./components');
 const Library = require('./components/library.js');
-const reducer = require('./reducers');
+const reducers = require('./reducers');
 
 const logger = store => next => action => {
   console.log('dispatching', action.type)
@@ -21,7 +21,7 @@ const logger = store => next => action => {
 
 let store = createStore(
   combineReducers({
-    library: reducer,
+    search: reducers.search, 
     routing: routerReducer,
   }),
   applyMiddleware(thunk)
@@ -29,7 +29,7 @@ let store = createStore(
 
 render(
   <Provider store={store}>
-    <Router history={hashHistory}>
+    <Router history={syncHistoryWithStore(hashHistory, store)}>
       <Route path='/' component={App}>
         <IndexRoute component={Library} />
       </Route>
