@@ -6,7 +6,9 @@ const { bindActionCreators } = require('redux');
 
 const MusicFinder = require('./musicfinder.js');
 
-const actions = require('../actions/library.js');
+const Item = require('../item.js');
+
+const actions = require('../actions/mixtape.js');
 
 class Library extends React.Component {
   componentDidMount() {
@@ -17,9 +19,27 @@ class Library extends React.Component {
     return (
       <div className='ui grid'>
         <MusicFinder />
+
+        <div>
+        {
+          this.props.mixtapes.map((mixtape, i) => {
+            return <div key={i}>{mixtape.title}</div>;
+          })
+        }
+        </div>
       </div>
     );
   }
 }
 
-module.exports = Library;
+const stateToProps = (state, props) => {
+  return {
+    error: state.library.error,
+    isFetching: state.library.isFetching,
+    mixtapes: state.library.mixtapes,
+  };
+};
+
+const dispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
+
+module.exports = connect(stateToProps, dispatchToProps)(Library);

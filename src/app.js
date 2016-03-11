@@ -2,38 +2,37 @@
 
 const React = require('react');
 const { render } = require('react-dom');
-const { createStore, combineReducers, applyMiddleware } = require('redux');
+const { createStore, applyMiddleware } = require('redux');
 const { Provider } = require('react-redux');
 const { Router, Route, IndexRoute, hashHistory } = require('react-router');
-const { syncHistoryWithStore, routerReducer } = require('react-router-redux');
-const thunk = require('redux-thunk');
+const { syncHistoryWithStore } = require('react-router-redux');
+const thunkMiddleware = require('redux-thunk');
+const { MongoClient } = require('mongodb');
 
 const App = require('./components');
 const Library = require('./components/library.js');
-const reducers = require('./reducers');
+const reducer = require('./reducers');
 
-const logger = store => next => action => {
-  console.log('dispatching', action.type)
-  const result = next(action)
-  console.log('Next state:', store.getState())
-  return result;
-};
-
-let store = createStore(
-  combineReducers({
-    search: reducers.search, 
-    routing: routerReducer,
-  }),
-  applyMiddleware(thunk)
+const store = createStore(
+  reducer,
+  applyMiddleware(thunkMiddleware)
 );
 
-render(
-  <Provider store={store}>
-    <Router history={syncHistoryWithStore(hashHistory, store)}>
-      <Route path='/' component={App}>
-        <IndexRoute component={Library} />
-      </Route>
-    </Router>
-  </Provider>, 
-  document.getElementById('container')
-);
+MongoClient.connect(
+  process.env.MONGODB + '/gramo',
+  (err, db) => {
+    if (err) throw err;
+
+    require('./helpers/db.js').init(db);
+
+    render(
+      <Provider store={store}>
+        <Router history={syncHistoryWithStore(hashHistory, store)}>
+          <Route path='/' component={App}>
+            <IndexRoute component={Library} />
+          </Route>
+        </Router>
+      </Provider>, 
+      document.getElementById('container')
+    );
+  });

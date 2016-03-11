@@ -25,7 +25,6 @@ class MusicFinder extends React.Component {
           });
         });
     }
-    s('slime season')
   }
 
   handleKeyUp(e) {

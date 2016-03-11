@@ -38,8 +38,9 @@ Menu.defaultProps = {
 };
 
 const stateToProps = (state, props) => {
+  console.log(state)
   return {
-    location: state.routing.locationBeforeTransitions.pathname,
+    location: state.routing.locationBeforeTransitions ? state.routing.locationBeforeTransitions.pathname : '/',
   };
 };
 
