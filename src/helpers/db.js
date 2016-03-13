@@ -2,6 +2,22 @@
 
 const Item = require('../item.js');
 
+/**
+ * @param {Object}
+ * @return {Promise<Item>}
+ */
+const populateMixtape = (doc) => {
+  return Db.collection('items')
+    .find({ _id: { $in: doc.tracks } })
+    .toArray()
+    .then(tracks => {
+      const opts = Object.assign({}, doc, {
+        tracks: tracks.map(track => new Item(track)),
+      });
+      return new Item(opts);
+    });
+};
+
 const Db = {
   init(db) {
     this._db = db;
@@ -13,8 +29,13 @@ const Db = {
 
   getMixtapes(filters) {
     return Db.collection('items')
-      .find()
-      .toArray();
+      .find({ type: 'mixtape' })
+      .toArray()
+      .then(docs => {
+        return Promise.all(
+          docs.map(populateMixtape)
+        );
+      });
   },
 
   insertItem(item) {

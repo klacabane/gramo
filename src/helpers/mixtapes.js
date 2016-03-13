@@ -18,7 +18,7 @@ const queue = new Queue(1);
 
 /**
  * @param {string}
- * @returns {Promise}
+ * @return {Promise}
  */
 const unlink = (localpath) => {
   return new Promise((resolve, reject) => {
@@ -57,7 +57,7 @@ const upload = (item) => () => {
  * ./music/${mixtape.title} local directory.
  * @param {Item}
  * @param {string}
- * @returns {Promise<Item>}
+ * @return {Promise<Item>}
  */
 const downloadToLocal = (mixtape, dlUri) => {
   const dirpath = path.join('./music', mixtape.title);
@@ -66,7 +66,7 @@ const downloadToLocal = (mixtape, dlUri) => {
    * Pipes the stream to a local file and 
    * inserts the item in the database.
    * @param {ReadableStream}
-   * @returns {Promise<Item>}
+   * @return {Promise<Item>}
    */
   const save = (file) => {
     const ext = path.extname(file.path);
@@ -133,7 +133,7 @@ const downloadToLocal = (mixtape, dlUri) => {
 module.exports = {
   /**
    * @param {Item}
-   * @returns {Promise<Item>}
+   * @return {Promise<Item>}
    */
   download(mixtape) {
     const scrap = $ => {
@@ -154,7 +154,7 @@ module.exports = {
 
   /**
    * @param {string}
-   * @returns {Promise<[]Item>}
+   * @return {Promise<[]Item>}
    */
   search(term) {
     const scrap = $ => {

@@ -23,7 +23,10 @@ class Library extends React.Component {
         <div>
         {
           this.props.mixtapes.map((mixtape, i) => {
-            return <div key={i}>{mixtape.title}</div>;
+            return <div key={i}>
+              <span>{ mixtape.title }</span>
+              <span>{ mixtape.artist }</span>
+            </div>;
           })
         }
         </div>
